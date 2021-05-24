@@ -72,31 +72,19 @@ def log(update, context):
 
 def bot_help(update, context):
     help_string = f'''
-/{BotCommands.HelpCommand}: To get this message
-
-/{BotCommands.MirrorCommand} [download_url][magnet_link]: Start mirroring the link to google drive.\nPlzzz see this for full use of this command https://telegra.ph/Magneto-Python-Aria---Custom-Filename-Examples-01-20
-
-/{BotCommands.UnzipMirrorCommand} [download_url][magnet_link] : starts mirroring and if downloaded file is any archive , extracts it to google drive
-
-/{BotCommands.TarMirrorCommand} [download_url][magnet_link]: start mirroring and upload the archived (.tar) version of the download
-
-/{BotCommands.WatchCommand} [youtube-dl supported link]: Mirror through youtube-dl. Click /{BotCommands.WatchCommand} for more help.
-
-/{BotCommands.TarWatchCommand} [youtube-dl supported link]: Mirror through youtube-dl and tar before uploading
-
-/{BotCommands.CancelMirror} : Reply to the message by which the download was initiated and that download will be cancelled
-
-/{BotCommands.StatusCommand}: Shows a status of all the downloads
-
-/{BotCommands.ListCommand} [search term]: Searches the search term in the Google drive, if found replies with the link
-
-/{BotCommands.StatsCommand}: Show Stats of the machine the bot is hosted on
-
-/{BotCommands.AuthorizeCommand}: Authorize a chat or a user to use the bot (Can only be invoked by owner of the bot)
-
-/{BotCommands.LogCommand}: Get a log file of the bot. Handy for getting crash reports
-
-/{BotCommands.SpeedCommand} : Check Internet Speed Of The Host
+/{BotCommands.HelpCommand} : <b>To get this message.</b>
+/{BotCommands.MirrorCommand} <b>[download_url][magnet_link]: Start mirroring the link to google drive.\nPlzzz see this for full use of this command https://telegra.ph/Magneto-Python-Aria---Custom-Filename-Examples-01-20</b>
+/{BotCommands.UnzipMirrorCommand} <b>[download_url][magnet_link] : starts mirroring and if downloaded file is any archive , extracts it to Google Drive.</b>
+/{BotCommands.TarMirrorCommand} <b>[download_url][magnet_link] : start mirroring and upload the archived (.tar) version of the download.</b>
+/{BotCommands.WatchCommand} <b>[youtube-dl supported link] : Mirror through youtube-dl. Click /{BotCommands.WatchCommand} for more help.</b>
+/{BotCommands.TarWatchCommand} <b>[youtube-dl supported link] : Mirror through youtube-dl and tar before uploading.</b>
+/{BotCommands.CancelMirror} : <b>Reply to the message by which the download was initiated and that download will be cancelled.</b>
+/{BotCommands.StatusCommand} : <b>Shows a status of all the downloads.</b>
+/{BotCommands.ListCommand} <b>[search term] : Searches the search term in the Google Drive, if found replies with the link.</b>
+/{BotCommands.StatsCommand} : <b>Show Stats of the machine the bot is hosted on.</b>
+/{BotCommands.AuthorizeCommand} : <b>Authorize a chat or a user to use the bot. (Can only be invoked by owner of the bot)</b>
+/{BotCommands.LogCommand} : <b>Get a log file of the bot. Handy for getting crash reports.</b>
+/{BotCommands.SpeedCommand} : <b>Check Internet Speed Of The Host.</b>
 
 '''
     sendMessage(help_string, context.bot, update)
