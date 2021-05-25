@@ -20,3 +20,4 @@ lxml
 telegraph
 speedtest-cli
 messages
+psycopg2-binary
