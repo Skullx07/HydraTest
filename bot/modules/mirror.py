@@ -19,7 +19,6 @@ from bot.helper.mirror_utils.upload_utils import gdriveTools
 from bot.helper.telegram_helper.bot_commands import BotCommands
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.message_utils import *
-from bot.helper.telegram_helper import button_build
 import urllib
 import pathlib
 import os
@@ -149,6 +148,7 @@ class MirrorListener(listeners.MirrorListeners):
 
     def onUploadComplete(self, link: str, size):
         with download_dict_lock:
+            kmsg = f'<b>\nFilename: </b><i>{download_dict[self.uid].name()}</i>\n<b>Size: </b><i>{size}</i>'
             msg = ""
             if SHORTENER is not None and SHORTENER_API is not None:
                 surl = requests.get(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
@@ -171,6 +171,7 @@ class MirrorListener(listeners.MirrorListeners):
             else:
                 uname = f'<a href="tg://user?id={self.message.from_user.id}">{self.message.from_user.first_name}</a>'
             if uname is not None:
+                nmsg = f'{uname} <b>Your Upload Has Been Completed!✅</b>\n'
                 msg += f'<b>Added by: </b>{uname}'
             try:
                 fs_utils.clean_download(download_dict[self.uid].path())
@@ -179,6 +180,15 @@ class MirrorListener(listeners.MirrorListeners):
             del download_dict[self.uid]
             count = len(download_dict)
         sendMessage(msg, self.bot, self.update)
+        # sendMessage(msg, self.bot, self.update)
+        #fwdpm = f'\n Your Upload Has Been Completed!'
+        logmsg = sendLog(msg, self.bot, self.update)
+        if logmsg:
+            log_m = f"\n\n<b>I've Sent Your Links in Private Chat!📮</b>"
+        else:
+            pass
+        sendMessage(nmsg + kmsg + log_m, self.bot, self.update)
+        sendPrivate(msg, self.bot, self.update)
         if count == 0:
             self.clean()
         else:
@@ -249,7 +259,7 @@ def _mirror(bot, update, isTar=False, extract=False):
                     listener = MirrorListener(bot, update, pswd, isTar, tag, extract)
                     tg_downloader = TelegramDownloadHelper(listener)
                     tg_downloader.add_download(reply_to, f'{DOWNLOAD_DIR}{listener.uid}/', name)
-                    sendStatusMessage(update, bot)
+                    sendStatusMessage(update)
                     if len(Interval) == 0:
                         Interval.append(setInterval(DOWNLOAD_STATUS_UPDATE_INTERVAL, update_all_messages))
                     return
@@ -258,7 +268,12 @@ def _mirror(bot, update, isTar=False, extract=False):
     else:
         tag = None
     if not bot_utils.is_url(link) and not bot_utils.is_magnet(link):
-        sendMessage('No download source provided', bot, update)
+        if isTar:
+            sendMessage(f"Use /{BotCommands.TarMirrorCommand} [Drive/Magnet/Mega/Direct Links]\nOr use /{BotCommands.TarMirrorCommand} in the reply of Torrents to archive 'em", bot, update)
+        elif extract:
+            sendMessage(f"Use /{BotCommands.UnzipMirrorCommand} [Drive/Magnet/Mega/Direct Links]\nOr use /{BotCommands.UnzipMirrorCommand} in the reply of Telegram/Torrents to extract 'em", bot, update)
+        else:
+            sendMessage(f"Use /{BotCommands.MirrorCommand} [Magnet/Mega/Direct Links]\nOr use /{BotCommands.MirrorCommand} in the reply of Telegram/Torrents to mirror 'em", bot, update)
         return
 
     try:
@@ -272,10 +287,10 @@ def _mirror(bot, update, isTar=False, extract=False):
         else:
             mega_dl = MegaDownloadHelper()
             mega_dl.add_download(link, f'{DOWNLOAD_DIR}/{listener.uid}/', listener)
-            sendStatusMessage(update, bot)
+            sendStatusMessage(update)
     else:
         ariaDlManager.add_download(link, f'{DOWNLOAD_DIR}/{listener.uid}/', listener, name)
-        sendStatusMessage(update, bot)
+        sendStatusMessage(update)
     if len(Interval) == 0:
         Interval.append(setInterval(DOWNLOAD_STATUS_UPDATE_INTERVAL, update_all_messages))
 
