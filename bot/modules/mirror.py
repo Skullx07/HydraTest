@@ -154,7 +154,7 @@ class MirrorListener(listeners.MirrorListeners):
                 surl = requests.get(f'https://{SHORTENER}/api?api={SHORTENER_API}&url={link}&format=text').text
                 msg += f"<b>Google Drive Link: </b><a href='{surl}'>{download_dict[self.uid].name()}</a> ({size})\n"
             else:
-                buttons.buildbutton("💾Drive Link💾", link)
+                msg += f"<b>Google Drive Link: </b><a href='{link}'>{download_dict[self.uid].name()}</a> ({size})\n"
             LOGGER.info(f'Done Uploading {download_dict[self.uid].name()}')
             if INDEX_URL is not None:
                 url_path = requests.utils.quote(f'{download_dict[self.uid].name()}')
