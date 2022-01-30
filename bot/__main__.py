@@ -3,12 +3,15 @@ import shutil, psutil
 import signal
 
 from sys import executable
+from datetime import datetime
+import pytz
 import time
 
+from telegram.error import BadRequest, Unauthorized
 from telegram.ext import CommandHandler
 from bot import bot, dispatcher, updater, botStartTime
 from bot.helper.ext_utils import fs_utils
-from bot.helper.telegram_helper.bot_commands import BotCommands
+from bot.helper.telegram_helper.bot_commands import BotCommands, REBOOT_LOG
 from bot.helper.telegram_helper.message_utils import *
 from .helper.ext_utils.bot_utils import get_readable_file_size, get_readable_time
 from .helper.telegram_helper.filters import CustomFilters
@@ -29,15 +32,15 @@ def stats(update, context):
     cpuUsage = psutil.cpu_percent(interval=0.5)
     memory = psutil.virtual_memory().percent
     disk = psutil.disk_usage('/').percent
-    stats = f'<b>Bot Uptime ⌚:</b> {currentTime}\n' \
-            f'<b>Total disk space🗄️:</b> {total}\n' \
-            f'<b>Used 🗃️:</b> {used}  ' \
-            f'<b>Free 🗃️:</b> {free}\n\n' \
-            f'📇Data Usage📇\n<b>Uploaded :</b> {sent}\n' \
-            f'<b>Downloaded:</b> {recv}\n\n' \
-            f'<b>CPU 🖥️:</b> {cpuUsage}% ' \
-            f'<b>RAM ⛏️:</b> {memory}% ' \
-            f'<b>Disk 🗄️:</b> {disk}%'
+    stats = f'<b>Bot Uptime★:</b> {currentTime}\n' \
+            f'<b>Total disk space★:</b> {total}\n' \
+            f'<b>Used★:</b> {used}  ' \
+            f'<b>Free★:</b> {free}\n\n' \
+            f'★Data Usage★\n<b>Uploaded :</b> {sent}\n' \
+            f'<b>Downloaded★:</b> {recv}\n\n' \
+            f'<b>CPU★:</b> {cpuUsage}% ' \
+            f'<b>RAM★:</b> {memory}% ' \
+            f'<b>Disk★:</b> {disk}%'
     sendMessage(stats, context.bot, update)
 
 
