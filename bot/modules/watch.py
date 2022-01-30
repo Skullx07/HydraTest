@@ -2,7 +2,7 @@ from telegram.ext import CommandHandler
 from telegram import Bot, Update
 from bot import Interval, DOWNLOAD_DIR, DOWNLOAD_STATUS_UPDATE_INTERVAL, dispatcher, LOGGER
 from bot.helper.ext_utils.bot_utils import setInterval
-from bot.helper.telegram_helper.message_utils import update_all_messages, sendMessage, sendStatusMessage
+from bot.helper.telegram_helper.message_utils import update_all_messages, sendMessage, sendStatusMessage, sendAddedMessage
 from .mirror import MirrorListener
 from bot.helper.mirror_utils.download_utils.youtube_dl_download_helper import YoutubeDLHelper
 from bot.helper.telegram_helper.bot_commands import BotCommands
@@ -25,15 +25,15 @@ def _watch(bot: Bot, update, isTar=False):
         sendMessage(msg, bot, update)
         return
     try:
-      if "|" in mssg:
-        mssg = mssg.split("|")
-        qual = mssg[0].split(" ")[2]
-        if qual == "":
-          raise IndexError
-      else:
-        qual = message_args[2]
-      if qual != "audio":
-        qual = f'bestvideo[height<={qual}]+bestaudio/best[height<={qual}]'
+        if "|" in mssg:
+            mssg = mssg.split("|")
+            qual = mssg[0].split(" ")[2]
+            if qual == "":
+                raise IndexError
+        else:
+            qual = message_args[2]
+        if qual != "audio":
+            qual = f'bestvideo[height<={qual}]+bestaudio/best[height<={qual}]'
     except IndexError:
       qual = "bestvideo+bestaudio/best"
     try:
@@ -49,7 +49,7 @@ def _watch(bot: Bot, update, isTar=False):
     listener = MirrorListener(bot, update, pswd, isTar, tag)
     ydl = YoutubeDLHelper(listener)
     threading.Thread(target=ydl.add_download,args=(link, f'{DOWNLOAD_DIR}{listener.uid}', qual, name)).start()
-    sendStatusMessage(update, bot)
+    sendStatusMessage(update, is_watch_command=True)
     if len(Interval) == 0:
         Interval.append(setInterval(DOWNLOAD_STATUS_UPDATE_INTERVAL, update_all_messages))
 
