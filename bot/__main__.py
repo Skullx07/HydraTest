@@ -98,6 +98,18 @@ def main():
             chat_id, msg_id = map(int, f)
         bot.edit_message_text("Restarted successfully!", chat_id, msg_id)
         os.remove(".restartmsg")
+        if REBOOT_LOG is not None and isinstance(REBOOT_LOG, str):
+
+        try:
+            now=datetime.now(pytz.timezone('Asia/Kolkata'))
+            current = now.strftime('%I:%M%P')
+            dispatcher.bot.sendMessage(f"{REBOOT_LOG}", f"Bot Restarted at {current} #Restarted")
+        except Unauthorized:
+            LOGGER.warning(
+                "Bot isnt able to send message to Reboot Log Group, go and check!"
+            )
+        except BadRequest as e:
+            LOGGER.warning(e.message)
 
     start_handler = CommandHandler(BotCommands.StartCommand, start,
                                    filters=CustomFilters.authorized_chat | CustomFilters.authorized_user, run_async=True)
