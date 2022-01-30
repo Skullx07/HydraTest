@@ -100,6 +100,8 @@ try:
     AUTO_DELETE_MESSAGE_DURATION = int(getConfig('AUTO_DELETE_MESSAGE_DURATION'))
     TELEGRAM_API = getConfig('TELEGRAM_API')
     TELEGRAM_HASH = getConfig('TELEGRAM_HASH')
+    UPLOAD_LOG = getConfig('UPLOAD_LOG')
+    UPLOAD_UNAME = getConfig('UPLOAD_UNAME')
 except KeyError as e:
     LOGGER.error("One or more env variables missing! Exiting now")
     exit(1)
