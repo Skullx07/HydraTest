@@ -101,7 +101,7 @@ def main():
             chat_id, msg_id = map(int, f)
         bot.edit_message_text("Restarted successfully!", chat_id, msg_id)
         os.remove(".restartmsg")
-        if REBOOT_LOG is not None and isinstance(REBOOT_LOG, str):
+    if REBOOT_LOG is not None and isinstance(REBOOT_LOG, str):
 
         try:
             now=datetime.now(pytz.timezone('Asia/Kolkata'))
