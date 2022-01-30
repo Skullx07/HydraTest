@@ -9,6 +9,12 @@ from bot import dispatcher
 
 def cloneNode(update,context):
     args = update.message.text.split(" ",maxsplit=1)
+     if update.message.from_user.username:
+        uname = f"@{update.message.from_user.username}"
+    else:
+        uname = f'<a href="tg://user?id={update.message.from_user.id}">{update.message.from_user.first_name}</a>'
+    if uname is not None:
+            cc = f'\n<b>Cloned by:</b> {uname}'
     if len(args) > 1:
         link = args[1]
         msg = sendMessage(f"Cloning: <code>{link}</code>",context.bot,update)
@@ -18,13 +24,14 @@ def cloneNode(update,context):
         if button == "":
             sendMessage(result,context.bot,update)
         else:
-            if update.message.from_user.username:
-                uname = f'@{update.message.from_user.username}'
-            else:
-                uname = f'<a href="tg://user?id={update.message.from_user.id}">{update.message.from_user.first_name}</a>'
-            if uname is not None:
-                cc = f'\n<b>Cloned by:</b> {uname}'
-            sendMessage(result+ cc, context.bot, update)
+            fwdpm = f'\n{uname} <b>Your Link has been Cloned Successfully!✅</b>'
+        logmsg = sendLog(result + cc, context.bot, update)
+        if logmsg:
+            log_m = f"\n\n<b>I've Sent Your Links in Private Chat!📮</b>"
+        else:
+            pass
+        sendMessage(fwdpm + log_m, context.bot, update)
+        sendPrivate(result, context.bot, update)
     else:
         sendMessage("Provide G-Drive Shareable Link to Clone.",context.bot,update)
 
