@@ -67,6 +67,7 @@ aria2 = aria2p.API(
 )
 
 DOWNLOAD_DIR = None
+BOT_NO = ""
 BOT_TOKEN = None
 
 download_dict_lock = threading.Lock()
@@ -89,6 +90,11 @@ except:
     pass
 
 try:
+    BOT_NO = getConfig('BOT_NO')
+except KeyError:
+    BOT_NO = ""
+
+try:
     BOT_TOKEN = getConfig('BOT_TOKEN')
     DB_URI = getConfig('DATABASE_URL')
     parent_id = getConfig('GDRIVE_FOLDER_ID')
@@ -102,6 +108,7 @@ try:
     TELEGRAM_HASH = getConfig('TELEGRAM_HASH')
     UPLOAD_LOG = getConfig('UPLOAD_LOG')
     UPLOAD_UNAME = getConfig('UPLOAD_UNAME')
+    REBOOT_LOG = getConfig("REBOOT_LOG")
 except KeyError as e:
     LOGGER.error("One or more env variables missing! Exiting now")
     exit(1)
